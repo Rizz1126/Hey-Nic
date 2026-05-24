@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: './', // Menggunakan relative path agar bisa jalan di subfolder GitHub Pages
+  base: '/For-Nic/', // Menggunakan relative path agar bisa jalan di subfolder GitHub Pages
 })

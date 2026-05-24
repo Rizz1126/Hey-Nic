@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tape.className = 'tape';
       
       const img = document.createElement('img');
-      img.src = `/photos/${photo}`;
+      img.src = `./photos/${photo}`;
       img.alt = `Memory ${index + 1}`;
       
       const caption = document.createElement('div');
