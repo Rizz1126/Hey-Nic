@@ -366,10 +366,10 @@ a:hover ~ .cursor, button:hover ~ .cursor {
 }
 
 /* Background image assignments */
-.image-1 { background-image: url('./photos/WhatsApp Image 2026-05-24 at 2.39.31 PM.jpeg'); }
-.image-2 { background-image: url('./photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (1).jpeg'); }
-.image-3 { background-image: url('./photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (2).jpeg'); }
-.image-4 { background-image: url('./photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (3).jpeg'); }
+.image-1 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM.jpeg'); }
+.image-2 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (1).jpeg'); }
+.image-3 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (2).jpeg'); }
+.image-4 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (3).jpeg'); }
 
 /* Final Text and Floating Animation */
 .final-text-overlay {
