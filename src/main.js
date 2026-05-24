@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     finalTextOverlay.style.transition = 'opacity 3s ease-out, transform 3s ease-out';
     
     const isMobile = window.innerWidth <= 768;
+    let maxTop = 0;
 
     photos.forEach((photo, index) => {
       const div = document.createElement('div');
@@ -207,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Random positioning vertically over the scrapbook height
       const topPos = index * 45 + Math.random() * 10 + 10; // spread along vh
+      maxTop = Math.max(maxTop, topPos);
       
       // Random horizontal placement
       let leftPos = Math.random() * 30 + 10; // 10% to 40%
@@ -244,6 +246,9 @@ document.addEventListener('DOMContentLoaded', () => {
         div.style.transform = `rotate(${rotation}deg) scale(1)`; // restore scale if needed
       }, index * 1000 + 1500); // 1.5s delay to start, 1s between photos
     });
+    
+    // Dynamically set scrapbook height so text doesn't overlap
+    scrapbook.style.minHeight = `${maxTop + 50}vh`;
     
     // Reveal final text after all photos are shown
     setTimeout(() => {
