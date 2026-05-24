@@ -1,0 +1,478 @@
+/* --- CSS Variables --- */
+:root {
+  --color-bg: #100e0d;
+  --color-text: #e8e1d5;
+  --color-muted: #8c8378;
+  --color-highlight: #c7a492;
+  --color-paper: #ded5c9;
+  --font-serif: 'Playfair Display', serif;
+  --font-typewriter: 'Courier Prime', monospace;
+  --font-hand: 'Caveat', cursive;
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* --- Base --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  overflow-x: hidden;
+  cursor: none; /* Custom cursor */
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 4px;
+}
+
+.mt-4 { margin-top: 1rem; }
+.mt-8 { margin-top: 2rem; }
+.mt-12 { margin-top: 3rem; }
+
+.handwritten {
+  font-family: var(--font-hand);
+  font-size: 2rem;
+  color: var(--color-highlight);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+/* --- Global Effects --- */
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.15;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.vhs-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 9997;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  animation: scanlines 10s linear infinite;
+  display: block;
+}
+.vhs-overlay.hidden {
+  display: none;
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100vh; }
+}
+
+/* --- Controls --- */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+.controls.visible {
+  opacity: 0.5;
+}
+.controls:hover {
+  opacity: 1;
+}
+.controls button {
+  background: transparent;
+  border: 1px solid var(--color-muted);
+  color: var(--color-text);
+  font-family: var(--font-typewriter);
+  font-size: 0.7rem;
+  padding: 5px 10px;
+  cursor: none;
+  transition: all 0.3s;
+}
+.controls button:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+/* --- Custom Cursor --- */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 10px; height: 10px;
+  background: var(--color-highlight);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10001;
+  mix-blend-mode: difference;
+  transition: width 0.2s, height 0.2s;
+}
+.cursor-trail {
+  position: fixed;
+  top: 0; left: 0;
+  width: 30px; height: 30px;
+  border: 1px solid var(--color-highlight);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10000;
+  transition: 0.1s ease-out;
+  mix-blend-mode: difference;
+}
+a:hover ~ .cursor, button:hover ~ .cursor {
+  width: 20px; height: 20px;
+}
+
+/* --- Intro Gate --- */
+.intro-gate {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 2s ease, visibility 2s ease;
+}
+.intro-gate.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+.click-prompt {
+  font-family: var(--font-typewriter);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: var(--color-muted);
+  animation: pulse 2s infinite;
+  cursor: none;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* --- Dart Game --- */
+.dart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.dart-instruction {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-highlight);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.target-area {
+  width: 300px;
+  height: 150px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px dashed rgba(140, 131, 120, 0.3);
+}
+.target-board {
+  width: 60px;
+  height: 60px;
+  background: repeating-radial-gradient(
+    circle,
+    #fff,
+    #fff 10px,
+    #c7a492 10px,
+    #c7a492 20px
+  );
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  left: 0;
+  box-shadow: 0 0 15px rgba(199, 164, 146, 0.2);
+  animation: moveTarget 2s linear infinite alternate;
+}
+.bullseye {
+  width: 20px;
+  height: 20px;
+  background: #100e0d;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes moveTarget {
+  0% { left: 0; }
+  100% { left: 240px; }
+}
+.dart {
+  font-size: 2rem;
+  color: var(--color-paper);
+  position: absolute;
+  bottom: 20%;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transform-origin: bottom center;
+}
+.dart.thrown {
+  transform: translateY(-250px) scale(0.5);
+}
+.dart.miss {
+  transform: translateY(-250px) scale(0.5) rotate(45deg);
+  opacity: 0.5;
+}
+
+/* --- Main Layout & Scenes --- */
+#app {
+  opacity: 0;
+  transition: opacity 3s ease;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+#app.visible {
+  opacity: 1;
+}
+
+.scene {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4rem 2rem;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2s ease, visibility 2s ease;
+}
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 10;
+}
+
+/* Intro Scene */
+.intro-scene {
+  background: #050404;
+  flex-direction: column;
+}
+.typewriter-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.type-line {
+  font-family: var(--font-typewriter);
+  font-size: 1.1rem;
+  min-height: 1.5em;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.title-reveal {
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  letter-spacing: 4px;
+  margin-top: 3rem;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 3s ease;
+  color: var(--color-highlight);
+}
+.title-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scroll-prompt {
+  position: absolute;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-typewriter);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+.scroll-prompt.visible {
+  opacity: 0.7;
+  animation: bounce 2s infinite;
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+  40% { transform: translateY(-10px) translateX(-50%); }
+  60% { transform: translateY(-5px) translateX(-50%); }
+}
+
+/* Poetry Scenes */
+.poetry-scene .content {
+  max-width: 800px;
+  font-size: 1.8rem;
+  line-height: 1.6;
+  z-index: 2;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  transition: opacity 2s ease-out, transform 2s ease-out;
+  filter: blur(5px);
+}
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* Parallax Backgrounds */
+.has-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.overlay-dark {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(16, 14, 13, 0.75);
+  z-index: 1;
+}
+
+/* Background image assignments */
+.image-1 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM.jpeg'); }
+.image-2 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (1).jpeg'); }
+.image-3 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (2).jpeg'); }
+.image-4 { background-image: url('/photos/WhatsApp Image 2026-05-24 at 2.39.31 PM (3).jpeg'); }
+
+/* Final Text and Floating Animation */
+.final-text-overlay {
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  z-index: 20;
+  font-size: 1.5rem;
+  margin: 2rem auto 5rem auto; /* Reduced space above and below */
+}
+.floating-text {
+  animation: floatText 6s ease-in-out infinite;
+}
+@keyframes floatText {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.title-glow {
+  font-size: 3.5rem;
+  color: var(--color-highlight);
+  text-shadow: 0 0 20px rgba(199, 164, 146, 0.3);
+}
+
+/* Gallery Scene */
+.gallery-scene {
+  flex-direction: column;
+  padding: 0;
+  background: #151312;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto; /* Enable scrolling for this scene */
+  pointer-events: auto; /* Allow scrolling interactions */
+}
+.gallery-scene::-webkit-scrollbar {
+  width: 8px;
+}
+.gallery-scene::-webkit-scrollbar-track {
+  background: #151312;
+}
+.gallery-scene::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+  border-radius: 4px;
+}
+.gallery-title {
+  margin-bottom: 4rem;
+}
+.scrapbook {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 180vh; /* Make it tall enough but not too tall */
+  margin: 0 auto;
+}
+.polaroid {
+  background: var(--color-paper);
+  padding: 15px 15px 40px 15px;
+  box-shadow: 2px 5px 15px rgba(0,0,0,0.5);
+  transition: transform 0.4s, box-shadow 0.4s;
+  max-width: 300px;
+  position: absolute; /* Absolute for random positioning */
+  opacity: 0; /* JS will fade them in */
+}
+.polaroid.in-view {
+  opacity: 1;
+}
+.polaroid:nth-child(even) {
+  transform: rotate(3deg) translateY(20px);
+}
+.polaroid:hover {
+  transform: scale(1.05) rotate(0deg);
+  box-shadow: 5px 10px 25px rgba(0,0,0,0.7);
+  z-index: 10;
+}
+.polaroid img {
+  width: 100%;
+  height: auto;
+  filter: sepia(0.3) contrast(1.1) brightness(0.9);
+}
+.polaroid .caption {
+  font-family: var(--font-hand);
+  color: #333;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 1.2rem;
+}
+.tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 80px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .title-reveal { font-size: 2rem; }
+  .poetry-scene .content { font-size: 1.3rem; }
+  .title-glow { font-size: 2.2rem; }
+  .polaroid { max-width: 100%; margin-bottom: 2rem; }
+  .cursor, .cursor-trail { display: none; } /* Disable custom cursor on mobile */
+  body { cursor: auto; }
+}
