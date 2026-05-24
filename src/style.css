@@ -475,4 +475,11 @@ a:hover ~ .cursor, button:hover ~ .cursor {
   .polaroid { max-width: 100%; margin-bottom: 2rem; }
   .cursor, .cursor-trail { display: none; } /* Disable custom cursor on mobile */
   body { cursor: auto; }
+  
+  /* Fix disappearing background on mobile devices (iOS Safari bug with fixed backgrounds) */
+  .has-bg {
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+  }
 }
